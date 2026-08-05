@@ -1,0 +1,2469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANTIVE 2-IN-1 | Cut Faster. Less Effort.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* ══ RESET & BASE ══════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --o: #F47B20;
+  --o2: #FF9E50;
+  --o3: #FFB870;
+  --og: rgba(244,123,32,0.18);
+  --og2: rgba(244,123,32,0.08);
+  --bk: #080808;
+  --bk2: #111111;
+  --bk3: #1A1A1A;
+  --wh: #FFFFFF;
+  --mu: #666;
+  --mu2: #999;
+  --bd: rgba(255,255,255,0.07);
+  --bdo: rgba(244,123,32,0.3);
+  --gn: #22C55E;
+  --rd: #EF4444;
+  --st: #FBBF24;
+  --r: 18px;
+  --r2: 28px;
+}
+html { scroll-behavior: smooth; }
+
+/* page canvas — sections float on top of this */
+body {
+  font-family:'Inter',sans-serif;
+  background: #060606;
+  color: var(--wh);
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  padding: 8px;
+}
+@media(min-width:768px){
+  body { max-width:100%; padding: 10px 14px; }
+  :root { --r:22px; --r2:32px; }
+}
+
+/* section card base — every section becomes a floating card */
+.s-card {
+  border-radius: 28px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  position: relative;
+}
+/* benefits needs scroll — can't clip overflow */
+.benefits-section.s-card { overflow: visible; }
+/* header card */
+.hdr { border-radius: 28px; margin-bottom: 10px; }
+
+@media(min-width:768px){
+  .s-card { border-radius: 40px; margin-bottom: 14px; }
+  .hdr { border-radius: 40px; margin-bottom: 14px; }
+}
+img { display:block; max-width:100%; }
+a { text-decoration:none; color:inherit; }
+
+/* ══ SCROLL PROGRESS ══════════════════════════════════════════════════════ */
+#progress {
+  position:fixed; top:0; left:0; right:0; height:2px; z-index:999;
+  background:linear-gradient(90deg, var(--o), var(--o2));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.1s linear;
+}
+
+/* ══ HEADER ═══════════════════════════════════════════════════════════════ */
+.hdr {
+  position:sticky; top:0; z-index:200;
+  padding:15px 22px;
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(8,8,8,0.80);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--bd);
+}
+.logo { display:flex; align-items:center; }
+.logo-img {
+  height:100px;
+  width:auto;
+  margin: -18px 0;
+}
+@media(min-width:768px){ .logo-img { height:120px; margin: -22px 0; } }
+.hdr-cta {
+  background:var(--o); color:#fff;
+  font-size:11px; font-weight:800;
+  padding:9px 16px; border-radius:100px;
+  letter-spacing:0.3px;
+  box-shadow:0 4px 16px var(--og);
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.hdr-cta:active { transform:scale(0.96); }
+
+/* ══ HERO ═════════════════════════════════════════════════════════════════ */
+.hero {
+  min-height:520px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  position:relative; overflow:hidden;
+  background:var(--bk);
+}
+@media(min-width:768px){
+  .hero { min-height:90vh; }
+}
+/* ══ HERO VIDEO SECTION ══ */
+.hero-video-section {
+  background: var(--bk);
+  overflow: hidden;
+  line-height: 0;
+}
+.hero-video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ══ FLOATING PIP VIDEO ══ */
+.pip-wrap {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 999;
+  width: 120px;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1.5px rgba(244,123,32,0.5);
+  transform: translateY(120%) scale(0.85);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(.22,1,.36,1), opacity 0.4s;
+  pointer-events: none;
+}
+.pip-wrap.visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+.pip-wrap.hidden { display: none; }
+.pip-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+}
+.pip-close {
+  position: absolute;
+  top: 7px; right: 7px;
+  width: 24px; height: 24px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  line-height: 1;
+}
+.pip-close:hover { background: rgba(244,123,32,0.9); }
+.pip-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  padding: 16px 8px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+@media(min-width:768px){
+  .pip-wrap { width: 156px; bottom: 28px; left: 28px; border-radius: 20px; }
+}
+
+/* ══ HERO TEXT SECTION ══ */
+.hero-text-section {
+  background: var(--bk);
+  padding: 36px 22px 40px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+@media(min-width:768px){
+  .hero-text-section { padding: 64px 80px 72px; }
+}
+
+/* animated background orbs */
+.orb {
+  position:absolute; border-radius:50%;
+  pointer-events:none; will-change:transform;
+}
+.orb1 {
+  width:380px; height:380px;
+  background:radial-gradient(circle, rgba(244,123,32,0.22) 0%, transparent 65%);
+  top:-100px; right:-120px;
+  animation:drift1 8s ease-in-out infinite;
+}
+.orb2 {
+  width:260px; height:260px;
+  background:radial-gradient(circle, rgba(244,123,32,0.12) 0%, transparent 65%);
+  bottom:80px; left:-80px;
+  animation:drift2 10s ease-in-out infinite;
+}
+.orb3 {
+  width:180px; height:180px;
+  background:radial-gradient(circle, rgba(255,180,80,0.10) 0%, transparent 65%);
+  top:40%; left:40%;
+  animation:drift3 12s ease-in-out infinite;
+}
+@keyframes drift1 {
+  0%,100% { transform:translate(0,0) scale(1); }
+  50%      { transform:translate(-20px,30px) scale(1.08); }
+}
+@keyframes drift2 {
+  0%,100% { transform:translate(0,0) scale(1); }
+  50%      { transform:translate(16px,-24px) scale(1.05); }
+}
+@keyframes drift3 {
+  0%,100% { transform:translate(0,0); }
+  33%      { transform:translate(12px,18px); }
+  66%      { transform:translate(-10px,10px); }
+}
+
+/* floating product image */
+.hero-img-wrap {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.hero-product-img {
+  width:115%;
+  max-width:none;
+  object-fit:contain;
+  will-change:transform;
+  animation:float 6s ease-in-out infinite;
+  filter:drop-shadow(0 30px 60px rgba(244,123,32,0.35));
+}
+@keyframes float {
+  0%,100% { transform:translateY(0px) rotate(-1deg); }
+  50%      { transform:translateY(-14px) rotate(1deg); }
+}
+
+/* hero text block */
+.hero-content {
+  position:relative; z-index:10;
+  padding:0 22px 44px;
+  background:linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.80) 60%, transparent 100%);
+}
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(244,123,32,0.12);
+  border:1px solid rgba(244,123,32,0.35);
+  border-radius:100px;
+  padding:5px 12px 5px 5px;
+  margin-bottom:18px;
+}
+.hero-eyebrow .dot {
+  width:22px; height:22px; background:var(--o);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:900;
+}
+.hero-eyebrow span { font-size:10px; font-weight:600; color:var(--o2); letter-spacing:1px; text-transform:uppercase; }
+
+.hero-title {
+  font-size:52px; font-weight:900;
+  line-height:0.95; letter-spacing:-2px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.hero-title .word {
+  display:inline-block;
+  transform:translateY(110%);
+  animation:wordUp 0.7s cubic-bezier(.22,1,.36,1) forwards;
+}
+.hero-title .word:nth-child(1) { animation-delay:0.1s; }
+.hero-title .word:nth-child(2) { animation-delay:0.22s; color:var(--o); }
+.hero-title .word:nth-child(3) { animation-delay:0.34s; }
+.hero-title .word:nth-child(4) { animation-delay:0.46s; }
+@keyframes wordUp {
+  to { transform:translateY(0); }
+}
+.hero-sub {
+  font-size:15px; color:#aaa; line-height:1.6; margin-bottom:28px;
+  opacity:0; animation:fadeIn 0.8s 0.7s forwards;
+}
+@keyframes fadeIn { to { opacity:1; } }
+
+.btn-hero {
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  width:100%;
+  background:linear-gradient(135deg, var(--o) 0%, #D96810 100%);
+  color:#fff; font-size:15px; font-weight:800;
+  padding:19px 24px; border-radius:var(--r2);
+  letter-spacing:0.2px;
+  box-shadow:0 8px 40px rgba(244,123,32,0.45), 0 2px 8px rgba(0,0,0,0.5);
+  position:relative; overflow:hidden;
+  opacity:0; animation:fadeIn 0.8s 0.9s forwards;
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.btn-hero::before {
+  content:'';
+  position:absolute; top:0; left:-100%;
+  width:55%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+  transform:skewX(-20deg);
+  animation:sheen 3.5s 1.5s infinite;
+}
+@keyframes sheen { 0%{left:-100%} 100%{left:220%} }
+.btn-hero .ico {
+  width:30px; height:30px; background:rgba(255,255,255,0.2);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:14px; flex-shrink:0;
+}
+.btn-hero:active { transform:scale(0.975); box-shadow:0 4px 20px rgba(244,123,32,0.35); }
+
+/* btn + badges wrapper — same width as button */
+.btn-badge-wrap {
+  display:flex; flex-direction:column;
+  width:100%;
+  max-width:380px;
+}
+
+/* trust badges row */
+.hero-badges {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:10px;
+  opacity:0; animation:fadeIn 0.8s 1.2s forwards;
+}
+.hero-badge {
+  display:flex; align-items:center; gap:5px;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;
+  padding:6px 8px;
+  background:rgba(255,255,255,0.04);
+}
+.badge-text {
+  display:flex; flex-direction:column; gap:0;
+}
+.badge-top {
+  font-size:9px; font-weight:700; color:rgba(255,255,255,0.5);
+  line-height:1.2; text-transform:uppercase; letter-spacing:0.3px;
+}
+.badge-bot {
+  font-size:11px; font-weight:700; color:#fff;
+  line-height:1.2;
+}
+
+/* trust micro row */
+.hero-trust {
+  display:flex; justify-content:center; gap:20px; margin-top:16px;
+  opacity:0; animation:fadeIn 0.8s 1.1s forwards;
+}
+.ht-item {
+  display:flex; align-items:center; gap:7px;
+  font-size:12px; color:#999; font-weight:500; letter-spacing:0.2px;
+}
+.ht-item::before {
+  content:'';
+  display:inline-block;
+  width:7px; height:7px;
+  border-radius:50%;
+  background: radial-gradient(circle at 35% 35%, #FFB870, #F47B20 60%, #c95d00);
+  box-shadow: 0 0 6px rgba(244,123,32,0.6);
+  flex-shrink:0;
+}
+
+/* ══ ORIGIN STORY ════════════════════════════════════════════════════════ */
+.origin-section {
+  background: var(--bk2);
+  padding: 48px 16px;
+  overflow: hidden;
+}
+.origin-eyebrow {
+  font-size: 11px; font-weight: 800; letter-spacing: 2px;
+  color: var(--o); text-transform: uppercase; margin-bottom: 12px;
+}
+.origin-title {
+  font-size: 28px; font-weight: 900; color: var(--wh);
+  line-height: 1.1; margin-bottom: 10px;
+}
+.origin-title span { color: var(--o); }
+.origin-sub {
+  font-size: 13px; color: var(--mu2); margin-bottom: 32px; line-height: 1.5;
+}
+.origin-single { border-radius:20px; overflow:hidden; margin-top:28px; }
+.origin-single img { width:100%; height:auto; display:block; }
+.origin-duo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+.origin-img-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+}
+.origin-img-wrap img {
+  width: 100%; height: auto; display: block;
+}
+@media(min-width: 768px) {
+  .origin-duo { flex-direction: row; align-items: flex-start; gap: 16px; }
+  .origin-img--left, .origin-img--right { flex: 1; }
+}
+.origin-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.origin-step {
+  display: flex; flex-direction: column;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.22,1,.36,1);
+}
+.origin-step.in { opacity: 1; transform: translateY(0); }
+.origin-step-num {
+  width: 28px; height: 28px;
+  background: var(--o); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff;
+  margin-bottom: 12px;
+}
+.origin-step-img {
+  width: 100%; aspect-ratio: 4/3;
+  border-radius: 16px; overflow: hidden;
+  margin-bottom: 12px;
+  background: var(--bk3);
+  position: relative;
+}
+.origin-step-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.origin-placeholder {
+  display: none; width: 100%; height: 100%;
+  align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #1c1c1c, #262626);
+}
+.origin-placeholder span {
+  font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.2);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.origin-step-title {
+  font-size: 14px; font-weight: 800; color: var(--wh); margin-bottom: 4px;
+}
+.origin-step-desc {
+  font-size: 12px; color: var(--mu2); line-height: 1.5; margin-bottom: 20px;
+}
+.origin-arrow {
+  color: var(--o); font-size: 24px; text-align: center;
+  margin: 4px 0 12px; opacity: 0.5;
+  transform: rotate(90deg);
+}
+@media(min-width:768px) {
+  .origin-section { padding: 80px 60px; }
+  .origin-title { font-size: 46px; }
+  .origin-steps { flex-direction: row; align-items: flex-start; gap: 0; }
+  .origin-step { flex: 1; padding: 0 12px; }
+  .origin-step-desc { margin-bottom: 0; }
+  .origin-arrow { transform: rotate(0deg); margin: 60px 0 0; font-size: 20px; flex-shrink: 0; }
+}
+@media(min-width:1200px) {
+  .origin-section { padding: 100px 80px; }
+  .origin-title { font-size: 54px; }
+  .origin-step { padding: 0 16px; }
+}
+
+/* ══ WHY SECTION ═════════════════════════════════════════════════════════ */
+.why-section {
+  background: var(--bk2);
+  padding: 28px 16px;
+}
+.why-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 2px;
+  color: var(--o); text-transform: uppercase; margin-bottom: 16px;
+  padding: 0 6px;
+}
+.why-cards {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.why-card {
+  position: relative; overflow: hidden;
+  background: var(--bk3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.22,1,.36,1);
+}
+.why-card.slide-in { opacity: 1; transform: translateY(0); }
+.why-card-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  background: #1a1a1a;
+}
+.why-card-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.why-card:first-child .why-card-img img {
+  object-position: center 15%;
+}
+.why-card-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(135deg, #1c1c1c 0%, #262626 100%);
+}
+.why-card-placeholder svg { opacity: 0.15; }
+.why-card-placeholder span {
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.18);
+  text-transform: uppercase; letter-spacing: 1.5px;
+}
+.why-card-body {
+  padding: 18px 20px 20px; position: relative;
+}
+.why-card-bg-num {
+  position: absolute; right: -8px; bottom: -16px;
+  font-size: 100px; font-weight: 900; line-height: 1;
+  color: rgba(255,255,255,0.04);
+  letter-spacing: -4px;
+  pointer-events: none; user-select: none;
+}
+.why-card-title {
+  font-size: 17px; font-weight: 800; color: var(--wh);
+  margin-bottom: 6px; line-height: 1.2;
+}
+.why-card-desc {
+  font-size: 13px; color: var(--mu2); line-height: 1.55;
+}
+@media(min-width:768px){
+  .why-cards { flex-direction: row; }
+  .why-card { flex: 1; }
+}
+
+/* ══ STATS SECTION ════════════════════════════════════════════════════════ */
+.stats-section {
+  background:var(--bk2);
+  padding:36px 22px;
+  border-top:1px solid var(--bd);
+  border-bottom:1px solid var(--bd);
+}
+.stats-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:0;
+}
+.stat-item {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:0 12px;
+  border-right:1px solid var(--bd);
+  opacity:0;
+  transform: translateX(60px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.22,1,.36,1);
+}
+.stat-item:last-child { border-right:none; }
+.stat-item.slide-in { opacity:1; transform:translateX(0); }
+.stat-num {
+  font-size:34px; font-weight:900; letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--wh),var(--mu2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.stat-num .acc { -webkit-text-fill-color:var(--o); color:var(--o); }
+.stat-label { font-size:10px; color:var(--mu); text-align:center; font-weight:500; letter-spacing:0.3px; }
+
+/* ══ CINEMATIC SECTION OPENER ═════════════════════════════════════════════ */
+.cin-section {
+  padding:64px 22px;
+  position:relative; overflow:hidden;
+}
+.cin-eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+  color:var(--o); margin-bottom:14px; display:flex; align-items:center; gap:8px;
+}
+.cin-eyebrow::before {
+  content:''; width:24px; height:1px; background:var(--o); display:block;
+}
+.cin-title {
+  font-size:38px; font-weight:900; letter-spacing:-1.5px;
+  line-height:1.0; margin-bottom:16px;
+}
+.cin-title .reveal-line {
+  display:block; overflow:hidden;
+}
+.cin-title .reveal-line span {
+  display:block;
+  transform:translateY(110%);
+  transition:transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.cin-section.in .cin-title .reveal-line span { transform:translateY(0); }
+.cin-title .reveal-line:nth-child(2) span { transition-delay:0.1s; }
+.cin-title .reveal-line:nth-child(3) span { transition-delay:0.2s; }
+.cin-sub {
+  font-size:15px; color:var(--mu2); line-height:1.65;
+  opacity:0; transform:translateY(16px);
+  transition:opacity 0.7s 0.35s, transform 0.7s 0.35s;
+}
+.cin-section.in .cin-sub { opacity:1; transform:translateY(0); }
+
+/* ══ PROBLEM ══════════════════════════════════════════════════════════════ */
+.problem-section {
+  background:#F3F3F3;
+  padding:60px 22px;
+}
+.problem-section .cin-eyebrow { color:var(--o); }
+.problem-section .cin-title { color:#0A0A0A; }
+.problem-section .cin-sub { color:#888; }
+.prob-stack { display:flex; flex-direction:column; gap:14px; margin-top:16px; }
+.prob-card {
+  background:#fff; border-radius:var(--r2);
+  overflow:hidden;
+  display:flex; align-items:stretch;
+  box-shadow:0 2px 16px rgba(0,0,0,0.06);
+  transform:translateX(-40px); opacity:0;
+  transition:transform 0.6s cubic-bezier(.22,1,.36,1), opacity 0.6s;
+}
+.prob-card.in { transform:translateX(0); opacity:1; }
+.prob-card:nth-child(2) { transition-delay:0.1s; }
+.prob-card:nth-child(3) { transition-delay:0.2s; }
+.prob-img {
+  width:110px; flex-shrink:0;
+  position:relative; overflow:hidden;
+  background:#DDD;
+}
+.prob-img img { width:100%; height:100%; object-fit:cover; }
+.prob-badge {
+  position:absolute; top:10px; left:10px;
+  width:24px; height:24px; background:var(--rd);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:12px; font-weight:900;
+  box-shadow:0 2px 8px rgba(239,68,68,0.5);
+}
+.prob-txt { padding:18px 16px; display:flex; flex-direction:column; justify-content:center; }
+.prob-name { font-size:15px; font-weight:800; color:#111; margin-bottom:4px; }
+.prob-desc { font-size:13px; color:#888; line-height:1.45; }
+
+/* ══ SOLUTION HERO ════════════════════════════════════════════════════════ */
+.sol-section {
+  background:var(--bk);
+  padding:64px 22px 44px;
+  position:relative; overflow:hidden;
+}
+.sol-glow {
+  position:absolute; top:-100px; right:-100px;
+  width:500px; height:500px; pointer-events:none;
+  background:radial-gradient(circle, rgba(244,123,32,0.14) 0%, transparent 62%);
+}
+.sol-img {
+  width:100%; border-radius:var(--r2);
+  margin:32px 0;
+  box-shadow:0 24px 80px rgba(244,123,32,0.25);
+  transform:translateY(30px); opacity:0;
+  transition:transform 0.8s cubic-bezier(.22,1,.36,1), opacity 0.8s;
+}
+.sol-img.in { transform:translateY(0); opacity:1; }
+.sol-video {
+  display:block;
+  object-fit:cover;
+}
+.sol-single-img { border-radius:20px; overflow:hidden; margin-bottom:36px; }
+.sol-single-img img { width:100%; height:auto; display:block; }
+.head-duo { display:flex; flex-direction:row; gap:12px; margin-bottom:36px; }
+.head-pill {
+  flex:1; min-width:0;
+  display:flex; flex-direction:column;
+  border-radius:20px; overflow:hidden;
+  height:260px;
+  transform:translateY(28px); opacity:0;
+  transition:transform 0.65s cubic-bezier(.22,1,.36,1), opacity 0.65s;
+}
+.head-pill.in { transform:translateY(0); opacity:1; }
+.head-pill:nth-child(2).in { transition-delay:0.2s; }
+.head-pill-icon {
+  flex:1; min-height:0; overflow:hidden; position:relative;
+}
+.head-pill-icon img {
+  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+}
+.head-pill-overlay {
+  position:absolute; inset:0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.88) 100%);
+  pointer-events:none;
+}
+.head-pill-body {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:14px 16px 16px;
+  z-index:2;
+}
+.head-pill-name {
+  font-size:14px; font-weight:800; color:#fff;
+  letter-spacing:0.5px; text-transform:uppercase; margin-bottom:3px;
+}
+.head-pill-desc { font-size:11px; color:rgba(255,255,255,0.6); line-height:1.4; }
+.head-pill-tag {
+  display:inline-block;
+  font-size:10px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase;
+  color:var(--o); background:rgba(244,123,32,0.15);
+  border:1px solid rgba(244,123,32,0.3);
+  border-radius:100px; padding:3px 10px; margin-bottom:8px;
+}
+
+/* ══ ANATOMY PLAYER ═══════════════════════════════════════════════════════ */
+.anatomy-outer {
+  background: var(--bk);
+  overflow: hidden;
+}
+.anatomy-player {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 22px 36px;
+  gap: 0;
+}
+.anatomy-img-stack {
+  position: relative;
+  width: 100%; max-width: 360px;
+  aspect-ratio: 1 / 1;
+}
+.aframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  filter: drop-shadow(0 16px 40px rgba(244,123,32,0.2));
+}
+.aframe.active { opacity: 1; }
+
+/* label */
+.anatomy-label-wrap {
+  position: relative;
+  width: 100%; max-width: 360px;
+  min-height: 90px;
+  margin-top: 12px;
+}
+.alabel {
+  position: absolute; inset: 0;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.4s, transform 0.4s cubic-bezier(.22,1,.36,1);
+  text-align: center;
+}
+.alabel.active { opacity: 1; transform: translateY(0); }
+.alabel-num {
+  font-size: 10px; font-weight: 800; letter-spacing: 3px;
+  color: var(--o); text-transform: uppercase; margin-bottom: 5px;
+}
+.alabel-name {
+  font-size: 24px; font-weight: 900; color: var(--wh);
+  letter-spacing: -0.5px; margin-bottom: 6px; line-height: 1.1;
+}
+.alabel-desc {
+  font-size: 13px; color: var(--mu2); line-height: 1.5;
+}
+
+/* controls */
+.anatomy-controls {
+  width: 100%; max-width: 360px;
+  margin-top: 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.anatomy-progress-track {
+  width: 100%; height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px; overflow: hidden;
+}
+.anatomy-progress-bar {
+  height: 100%; width: 0%;
+  background: var(--o);
+  border-radius: 2px;
+  transition: width linear;
+}
+.anatomy-dots-nav {
+  display: flex; gap: 8px; justify-content: center;
+}
+.adot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.adot.active {
+  background: var(--o); transform: scale(1.5);
+  box-shadow: 0 0 8px rgba(244,123,32,0.6);
+}
+
+@media(min-width:768px) {
+  .anatomy-img-stack { max-width: 480px; }
+  .anatomy-label-wrap { max-width: 480px; }
+  .anatomy-controls { max-width: 480px; }
+  .alabel-name { font-size: 32px; }
+}
+
+/* ══ HOW IT WORKS (sticky scroll) ════════════════════════════════════════ */
+.how-section { background:var(--bk); padding:60px 22px; }
+.how-section .cin-eyebrow { color:var(--o); }
+.how-section .cin-title { color:var(--wh); }
+.how-steps {
+  display: flex; flex-direction: column; gap: 12px;
+  margin: 32px 0;
+}
+.how-step {
+  display: flex; align-items: flex-start; gap: 16px;
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.22,1,.36,1);
+}
+.how-step.in { opacity: 1; transform: translateX(0); }
+.how-step:nth-child(2) { transition-delay: 0.1s; }
+.how-step:nth-child(3) { transition-delay: 0.2s; }
+.how-step-num {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: var(--o); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff;
+}
+.how-step-body {}
+.how-step-title {
+  font-size: 14px; font-weight: 800; color: var(--wh); margin-bottom: 2px;
+}
+.how-step-desc {
+  font-size: 12px; color: var(--mu2); line-height: 1.5;
+}
+@media(min-width:768px){
+  .how-steps { flex-direction: row; gap: 24px; margin: 40px 0; }
+  .how-step { flex: 1; flex-direction: column; gap: 12px; }
+  .how-step-num { width: 40px; height: 40px; font-size: 16px; }
+}
+.how-video-wrap {
+  margin-top: 32px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+}
+.how-video {
+  width: 100%; display: block;
+  object-fit: cover;
+}
+.step-cards { display:flex; flex-direction:column; gap:18px; margin-top:36px; }
+.step-card {
+  background:#fff; border-radius:var(--r2);
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+  transform:translateY(40px); opacity:0;
+  transition:transform 0.65s cubic-bezier(.22,1,.36,1), opacity 0.65s;
+}
+.step-card.in { transform:translateY(0); opacity:1; }
+.step-card:nth-child(2).in { transition-delay:0.12s; }
+.step-card:nth-child(3).in { transition-delay:0.24s; }
+.step-img-box {
+  width:100%; height:220px;
+  position:relative; overflow:hidden; background:#E0E0E0;
+}
+.step-img-box img { width:100%; height:100%; object-fit:cover; }
+.step-ph {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#E8E8E8,#D4D4D4);
+  color:#bbb; font-size:12px; gap:10px;
+}
+.step-ph .sp-icon { font-size:42px; opacity:0.5; }
+.step-num {
+  position:absolute; top:16px; left:16px;
+  width:38px; height:38px;
+  background:linear-gradient(135deg,var(--o),var(--o2));
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:17px; font-weight:900; color:#fff;
+  box-shadow:0 4px 16px var(--og);
+}
+.step-body { padding:22px 22px 24px; }
+.step-title { font-size:17px; font-weight:800; color:#111; margin-bottom:6px; }
+.step-desc { font-size:13px; color:#777; line-height:1.6; }
+
+/* ══ BENEFITS (horizontal scroll on mobile) ══════════════════════════════ */
+.benefits-section { background:var(--bk); padding:64px 0 64px 22px; overflow:hidden; }
+.benefits-section .cin-eyebrow { margin-right:22px; }
+.benefits-section .cin-title { margin-right:22px; }
+.benefits-section .cin-sub { margin-right:22px; }
+.benefits-scroll {
+  display:flex; gap:12px; margin-top:32px;
+  overflow-x:auto; padding-bottom:8px; padding-right:22px;
+  scroll-snap-type:x mandatory;
+  -ms-overflow-style:none; scrollbar-width:none;
+}
+.benefits-scroll::-webkit-scrollbar { display:none; }
+.ben-card {
+  background:var(--bk3); border:1px solid var(--bd);
+  border-radius:var(--r2); padding:26px 22px;
+  min-width:200px; flex-shrink:0;
+  scroll-snap-align:start;
+  display:flex; flex-direction:column; gap:14px;
+  transition:border-color 0.3s, transform 0.3s;
+}
+.ben-card:hover { border-color:var(--bdo); transform:translateY(-4px); }
+.ben-icon {
+  width:46px; height:46px;
+  background:rgba(244,123,32,0.1); border-radius:14px;
+  display:flex; align-items:center; justify-content:center; font-size:22px;
+}
+.ben-title { font-size:14px; font-weight:800; line-height:1.3; }
+.ben-desc { font-size:12px; color:var(--mu); line-height:1.55; }
+.scroll-hint {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--mu); margin-top:14px; margin-right:22px; padding-left:2px;
+}
+.scroll-hint::after { content:'→'; color:var(--o); font-size:14px; }
+
+/* ══ PRODUCT DETAIL PHOTOS ════════════════════════════════════════════════ */
+.detail-section { background:var(--bk2); padding:20px; }
+.detail-grid { display:flex; flex-direction:column; gap:12px; }
+.detail-img {
+  width:100%; border-radius:var(--r2);
+  box-shadow:0 16px 50px rgba(0,0,0,0.5);
+  transform:scale(0.96); opacity:0;
+  transition:transform 0.7s cubic-bezier(.22,1,.36,1), opacity 0.7s;
+}
+.detail-img.in { transform:scale(1); opacity:1; }
+.detail-img:nth-child(2).in { transition-delay:0.15s; }
+
+/* ══ WORKS ON (grid) ══════════════════════════════════════════════════════ */
+.works-section { background:#F3F3F3; padding:60px 22px; }
+.works-section .cin-eyebrow { color:var(--gn); }
+.works-section .cin-title { color:#111; }
+.mat-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:32px;
+}
+.mat-item {
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  transform:scale(0.85); opacity:0;
+  transition:transform 0.5s cubic-bezier(.22,1,.36,1), opacity 0.5s;
+}
+.mat-item.in { transform:scale(1); opacity:1; }
+.mat-item:nth-child(2).in { transition-delay:.06s; }
+.mat-item:nth-child(3).in { transition-delay:.12s; }
+.mat-item:nth-child(4).in { transition-delay:.18s; }
+.mat-item:nth-child(5).in { transition-delay:.24s; }
+.mat-item:nth-child(6).in { transition-delay:.30s; }
+.mat-item:nth-child(7).in { transition-delay:.36s; }
+.mat-item:nth-child(8).in { transition-delay:.42s; }
+.mat-box {
+  width:100%; aspect-ratio:1; border-radius:14px;
+  overflow:hidden; position:relative;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; position:relative; overflow:hidden;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.mat-box img { width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0; }
+.mat-check {
+  position:absolute; bottom:5px; right:5px;
+  width:18px; height:18px; background:var(--gn);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:#fff; font-weight:900;
+}
+.mat-label { font-size:10px; font-weight:600; color:#444; text-align:center; line-height:1.3; }
+
+/* ══ NOT FOR ══════════════════════════════════════════════════════════════ */
+.not-section { background:#fff; padding:52px 22px; }
+.not-section .cin-eyebrow { color:var(--rd); }
+.not-section .cin-title { color:#111; }
+.not-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:32px; }
+.not-card {
+  background:#F7F7F7; border-radius:var(--r2); padding:22px 16px;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  transform:translateY(24px); opacity:0;
+  transition:transform 0.6s cubic-bezier(.22,1,.36,1), opacity 0.6s;
+}
+.not-card.in { transform:translateY(0); opacity:1; }
+.not-card:nth-child(2).in { transition-delay:.08s; }
+.not-card:nth-child(3).in { transition-delay:.16s; }
+.not-card:nth-child(4).in { transition-delay:.24s; }
+.not-ico {
+  width:60px; height:60px;
+  background:rgba(239,68,68,0.08);
+  border-radius:50%; border:2px solid var(--rd);
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; position:relative;
+}
+.not-ico::before, .not-ico::after {
+  content:''; position:absolute;
+  width:78%; height:2px; background:var(--rd); border-radius:2px;
+}
+.not-ico::before { transform:rotate(45deg); }
+.not-ico::after  { transform:rotate(-45deg); }
+.not-label { font-size:12px; font-weight:700; color:#333; text-align:center; }
+.not-note {
+  grid-column:1/-1; font-size:11px; color:var(--mu);
+  text-align:center; padding:12px 0;
+}
+
+/* ══ AMAZON TRUST ═════════════════════════════════════════════════════════ */
+.amazon-section {
+  background:var(--bk);
+  padding:64px 22px;
+  position:relative; overflow:hidden;
+}
+.amazon-section::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--o),transparent);
+}
+.amz-feats { display:flex; flex-direction:column; gap:10px; margin:32px 0 36px; }
+.amz-feat {
+  display:flex; align-items:center; gap:16px;
+  background:var(--bk3); border:1px solid var(--bd);
+  border-radius:var(--r); padding:16px 18px;
+  transform:translateX(-30px); opacity:0;
+  transition:transform 0.6s cubic-bezier(.22,1,.36,1), opacity 0.6s, border-color 0.3s;
+}
+.amz-feat.in { transform:translateX(0); opacity:1; }
+.amz-feat:nth-child(2).in { transition-delay:.1s; }
+.amz-feat:nth-child(3).in { transition-delay:.2s; }
+.amz-feat:hover { border-color:var(--bdo); }
+.amz-feat-ico {
+  width:42px; height:42px; flex-shrink:0;
+  background:rgba(244,123,32,0.1); border-radius:12px;
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+  overflow:hidden;
+}
+.amz-feat-ico--img { background:none; padding:0; }
+.amz-feat-ico--img img { width:100%; height:100%; object-fit:cover; display:block; border-radius:12px; }
+.amz-feat-txt strong { display:block; font-size:14px; font-weight:700; margin-bottom:2px; }
+.amz-feat-txt span { font-size:13px; color:#888; }
+
+/* ══ CUTTING APP ══════════════════════════════════════════════════════════ */
+.app-section {
+  background: #F3F3F3;
+  padding: 52px 22px;
+  overflow: hidden;
+}
+.app-inner {
+  display: flex; flex-direction: column; gap: 48px; align-items: center;
+}
+.app-title {
+  font-size: 34px; font-weight: 900; letter-spacing: -1.5px;
+  color: var(--wh); line-height: 1.1; margin-bottom: 14px;
+}
+.app-section .cin-eyebrow { color: var(--o); }
+.app-section .app-title { color: #0A0A0A; }
+.app-title span { color: var(--o); }
+.app-sub {
+  font-size: 14px; color: #666; line-height: 1.65; margin-bottom: 28px;
+}
+.app-features { display: flex; flex-direction: column; gap: 18px; }
+.app-feat {
+  display: flex; align-items: flex-start; gap: 14px;
+  opacity: 0; transform: translateX(-24px);
+  transition: opacity 0.5s, transform 0.5s cubic-bezier(.22,1,.36,1);
+}
+.app-feat.in { opacity: 1; transform: translateX(0); }
+.app-feat-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: rgba(244,123,32,0.1);
+  border: 1px solid rgba(244,123,32,0.25);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.app-feat-name { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 2px; }
+.app-feat-desc { font-size: 12px; color: #777; }
+.app-link-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: #555; font-size: 13px; font-weight: 600;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 100px; padding: 9px 16px;
+  background: rgba(0,0,0,0.04);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.app-link-btn:hover { color: #111; border-color: rgba(0,0,0,0.3); background: rgba(0,0,0,0.08); }
+
+/* phone mockup */
+.app-phone-wrap {
+  position: relative; display: flex; justify-content: center;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s, transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.app-phone-wrap.in { opacity: 1; transform: translateY(0); }
+.app-fan {
+  position: relative;
+  width: 260px; height: 360px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.app-fan .app-phone {
+  position: absolute; bottom: 0;
+  transform-origin: bottom center;
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.app-phone--left  {
+  transform: rotate(0deg) translateX(0px) translateY(40px);
+  z-index: 1;
+}
+.app-phone--right {
+  transform: rotate(0deg) translateX(0px) translateY(40px);
+  z-index: 2;
+}
+.app-phone--left.fan-in  {
+  opacity: 0.85;
+  transform: rotate(-12deg) translateX(-40px) translateY(0px);
+}
+.app-phone--right.fan-in {
+  opacity: 1;
+  transform: rotate(12deg) translateX(40px) translateY(0px);
+}
+.app-phone-glow {
+  position: absolute; top: 10%; left: 50%;
+  transform: translateX(-50%);
+  width: 240px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(244,123,32,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  animation: drift2 7s ease-in-out infinite;
+}
+.app-phone {
+  position: relative; z-index: 1;
+  width: 200px;
+  background: #111;
+  border-radius: 36px;
+  border: 2px solid rgba(255,255,255,0.1);
+  padding: 14px 10px 20px;
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.app-phone-notch {
+  width: 60px; height: 6px;
+  background: #222; border-radius: 3px;
+  margin: 0 auto 10px;
+}
+.app-phone-screen {
+  background: #0a0a0a;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 9/16;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.app-screenshot {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.app-screen-placeholder {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; padding: 20px; text-align: center;
+}
+.app-screen-placeholder p {
+  font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.5;
+}
+.app-phone-btn {
+  width: 40px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px; margin: 10px auto 0;
+}
+
+@media(min-width:768px) {
+  .app-section { padding: 80px 60px; }
+  .app-inner {
+    flex-direction: row; gap: 60px;
+    align-items: center; justify-content: center;
+  }
+  .app-text { flex: 1; max-width: 480px; }
+  .app-title { font-size: 46px; }
+  .app-phone { width: 240px; }
+}
+@media(min-width:1200px) {
+  .app-section { padding: 100px 80px; }
+  .app-title { font-size: 54px; }
+  .app-phone { width: 260px; }
+}
+
+/* ══ FAQ ══════════════════════════════════════════════════════════════════ */
+.faq-section {
+  background: var(--bk2);
+  padding: 52px 22px;
+}
+.faq-title {
+  font-size: 28px; font-weight: 900; letter-spacing: -1px;
+  color: var(--wh); margin-bottom: 28px; line-height: 1.1;
+}
+.faq-list {
+  display: flex; flex-direction: column; gap: 0;
+}
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.faq-item:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+.faq-q {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0; gap: 16px;
+  color: var(--wh); text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600; line-height: 1.4;
+}
+.faq-q:hover { color: var(--o); }
+.faq-icon {
+  flex-shrink: 0; color: var(--o);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+}
+.faq-item.open .faq-icon { transform: rotate(180deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(.22,1,.36,1), padding 0.3s;
+  padding: 0;
+}
+.faq-item.open .faq-a {
+  max-height: 300px;
+  padding-bottom: 18px;
+}
+.faq-a p {
+  font-size: 13px; color: var(--mu2); line-height: 1.65;
+}
+
+@media(min-width:768px) {
+  .faq-section { padding: 80px 60px; }
+  .faq-title { font-size: 40px; }
+  .faq-list { max-width: 720px; }
+  .faq-q { font-size: 15px; padding: 22px 0; }
+  .faq-a p { font-size: 14px; }
+}
+@media(min-width:1200px) {
+  .faq-section { padding: 100px 80px; }
+}
+
+/* ══ REVIEWS ══════════════════════════════════════════════════════════════ */
+.reviews-section { background:var(--bk2); padding:64px 22px; }
+.rev-cards { display:flex; flex-direction:column; gap:14px; margin-top:32px; }
+.rev-card {
+  background:var(--bk); border:1px solid var(--bd);
+  border-radius:var(--r2); padding:24px;
+  transform:translateY(30px); opacity:0;
+  transition:transform 0.6s cubic-bezier(.22,1,.36,1), opacity 0.6s, border-color 0.3s;
+}
+.rev-card.in { transform:translateY(0); opacity:1; }
+.rev-card:nth-child(2).in { transition-delay:.12s; }
+.rev-card:nth-child(3).in { transition-delay:.24s; }
+.rev-card:nth-child(4).in { transition-delay:.36s; }
+.rev-card:hover { border-color:rgba(251,191,36,0.2); }
+.rev-author { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.rev-avatar { width:44px; height:44px; border-radius:50%; overflow:hidden; flex-shrink:0; }
+.rev-avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+.rev-avatar-placeholder { width:44px; height:44px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:#fff; }
+.rev-name { font-size:14px; font-weight:600; color:var(--wh); }
+.rev-location { font-size:12px; color:#888; margin-top:1px; }
+.stars { font-size:15px; color:var(--st); letter-spacing:2px; margin-bottom:12px; }
+.rev-text { font-size:14px; color:#CCC; line-height:1.65; font-style:italic; margin-bottom:16px; }
+.rev-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.2);
+  border-radius:100px; padding:5px 12px;
+  font-size:11px; font-weight:600; color:var(--gn);
+}
+
+/* ══ FINAL CTA ════════════════════════════════════════════════════════════ */
+.final-section {
+  background:var(--bk); text-align:center; padding:0; overflow:hidden;
+}
+.final-img-wrap {
+  position:relative;
+}
+.final-bg-img {
+  width:100%; height:auto; display:block;
+}
+.final-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,
+    transparent 45%,
+    rgba(8,8,8,0.75) 72%,
+    #080808 100%);
+  pointer-events:none;
+}
+.final-content {
+  position:relative; z-index:2;
+  margin-top:-50px;
+  padding:0 22px 44px;
+}
+.final-title {
+  font-size:42px; font-weight:900; letter-spacing:-1.5px; line-height:1.0;
+  margin-bottom:12px; color:var(--wh);
+}
+.final-title .acc {
+  background:linear-gradient(90deg,var(--o),var(--o2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.final-sub { font-size:15px; color:rgba(255,255,255,0.75); margin-bottom:36px; }
+.final-btns { display:flex; flex-direction:column; gap:12px; }
+.final-trust {
+  display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+  margin-top:28px;
+}
+.ft-item { display:flex; align-items:center; gap:5px; font-size:11px; color:rgba(255,255,255,0.35); }
+
+/* ══ AMZ VIDEOS ═══════════════════════════════════════════════════════════ */
+.amz-videos { display:flex; flex-direction:row; gap:10px; margin-bottom:24px; }
+.amz-vid { flex:1; aspect-ratio:9/16; border-radius:var(--r2); overflow:hidden; box-shadow:0 20px 60px rgba(244,123,32,0.2); }
+.amz-vid video { width:100%; height:100%; object-fit:cover; display:block; }
+
+/* ══ SOUND BUTTON ═════════════════════════════════════════════════════════ */
+.vid-wrap { position:relative; display:block; line-height:0; }
+.vid-wrap video { width:100%; display:block; }
+.sound-btn {
+  position:absolute; bottom:12px; right:12px;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.2);
+  backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:10; transition:background 0.2s;
+}
+.sound-btn:hover { background:rgba(0,0,0,0.8); }
+.sound-btn svg { width:16px; height:16px; color:#fff; }
+
+/* ══ GENERIC BTN STYLES ═══════════════════════════════════════════════════ */
+.btn-primary {
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  width:100%;
+  background:linear-gradient(135deg,var(--o) 0%,#D96810 100%);
+  color:#fff; font-size:15px; font-weight:800;
+  padding:19px 24px; border-radius:var(--r2);
+  box-shadow:0 8px 40px rgba(244,123,32,0.4), 0 2px 8px rgba(0,0,0,0.5);
+  position:relative; overflow:hidden;
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary::before {
+  content:''; position:absolute; top:0; left:-100%;
+  width:55%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent);
+  transform:skewX(-20deg); animation:sheen 3.5s infinite;
+}
+.btn-primary:active { transform:scale(0.975); }
+.btn-primary .ico {
+  width:30px; height:30px; background:rgba(255,255,255,0.2);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:14px; flex-shrink:0;
+}
+.btn-ghost {
+  display:flex; align-items:center; justify-content:center;
+  width:100%; background:transparent;
+  color:var(--wh); font-size:14px; font-weight:700;
+  padding:17px 24px; border-radius:var(--r2);
+  border:1.5px solid rgba(255,255,255,0.15);
+  transition:border-color 0.3s, background 0.3s;
+}
+.btn-ghost:hover { border-color:var(--o); background:rgba(244,123,32,0.08); }
+
+/* ══ DIVIDERS ═════════════════════════════════════════════════════════════ */
+.glow-divider {
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(244,123,32,0.4),transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DESKTOP STYLES  (≥ 768px)
+══════════════════════════════════════════════════════════════════════════ */
+@media(min-width:768px){
+
+  /* ── layout wrapper ── */
+  .desk-wrap { max-width:1200px; margin:0 auto; }
+  .desk-wrap-lg { max-width:1400px; margin:0 auto; }
+
+  /* ── header ── */
+  .hdr { padding:18px 60px; }
+  .logo { font-size:24px; }
+  .hdr-cta { font-size:13px; padding:11px 24px; }
+
+  /* ── HERO desktop: split layout ── */
+  .hero {
+    min-height:100svh;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+  }
+  .hero-img-wrap {
+    position:relative; /* override absolute */
+    inset:auto;
+    display:flex; align-items:center; justify-content:center;
+    padding:60px 40px 60px 0;
+    order:2;
+  }
+  .hero-product-img {
+    width:100%;
+    max-width:600px;
+  }
+  .hero-content {
+    order:1;
+    padding:0 60px 0 60px;
+    background:none;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .hero-title { font-size:72px; letter-spacing:-3px; }
+  .hero-title .word:nth-child(3) { font-size:52px; }
+  .hero-sub { font-size:18px; max-width:400px; }
+  .btn-hero { max-width:380px; font-size:16px; }
+  .hero-trust { justify-content:flex-start; }
+
+  /* ── STATS ── */
+  .stats-section { padding:48px 60px; }
+  .stats-grid { max-width:700px; margin:0 auto; }
+  .stat-num { font-size:52px; }
+  .stat-label { font-size:13px; }
+
+  /* ── generic section padding ── */
+  .cin-section { padding:100px 60px; }
+  .cin-title { font-size:58px; letter-spacing:-2px; }
+  .cin-sub { font-size:18px; max-width:520px; }
+
+  /* ── PROBLEM ── */
+  .problem-section { padding:100px 60px; }
+  .problem-section .desk-inner {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:60px; align-items:start;
+  }
+  .problem-section .cin-eyebrow,
+  .problem-section .cin-title,
+  .problem-section .cin-sub { margin:0; }
+  .problem-section .cin-sub { margin-top:16px; }
+  .prob-stack { margin-top:0; }
+  .prob-card { border-radius:var(--r2); }
+  .prob-img { width:130px; }
+
+  /* ── SOLUTION ── */
+  .sol-section { padding:100px 60px; }
+  .sol-eyebrow-top { margin-bottom:24px; }
+  .sol-desk {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:40px; align-items:stretch;
+  }
+  .sol-left { display:flex; flex-direction:column; }
+  .sol-img { margin:0; width:100%; height:100%; object-fit:contain; flex:1; }
+  .sol-single-img { height:auto; }
+  .sol-single-img img { width:100%; height:auto; }
+  .sol-right { display:flex; flex-direction:column; gap:0; }
+  .sol-right .cin-title { font-size:46px; }
+  .sol-right .cin-title,
+  .sol-right .cin-sub { display:block; }
+  .head-duo { margin-top:16px; margin-bottom:16px; }
+  .head-pill { height:200px; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { padding:100px 60px; }
+  .step-cards {
+    flex-direction:row; gap:20px; margin-top:48px;
+  }
+  .step-card { flex:1; }
+  .step-img-box { height:240px; }
+  .step-title { font-size:18px; }
+  .step-desc { font-size:14px; }
+
+  /* ── BENEFITS ── */
+  .benefits-section { padding:100px 60px; }
+  .benefits-section .cin-eyebrow,
+  .benefits-section .cin-title,
+  .benefits-section .cin-sub,
+  .benefits-section .scroll-hint { margin-right:0; padding-right:0; }
+  .scroll-hint { display:none; }
+  .benefits-scroll {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    overflow:visible;
+    padding:0; margin-top:40px; padding-right:0;
+  }
+  .ben-card { min-width:unset; }
+
+  /* ── DETAIL PHOTOS ── */
+  .detail-section { padding:40px 60px; }
+  .detail-grid {
+    flex-direction:row; gap:20px;
+  }
+  .detail-img { flex:1; }
+
+  /* ── WORKS ON ── */
+  .works-section { padding:100px 60px; }
+  .works-desk {
+    display:grid; grid-template-columns:300px 1fr;
+    gap:80px; align-items:start;
+  }
+  .works-desk .cin-eyebrow,
+  .works-desk .cin-title { margin:0; }
+  .mat-grid { grid-template-columns:repeat(4,1fr); gap:16px; margin-top:0; }
+  .mat-box { font-size:36px; }
+  .mat-label { font-size:12px; }
+
+  /* ── NOT FOR ── */
+  .not-section { padding:100px 60px; }
+  .not-desk {
+    display:grid; grid-template-columns:300px 1fr;
+    gap:80px; align-items:start;
+  }
+  .not-desk .cin-eyebrow,
+  .not-desk .cin-title { margin:0; }
+  .not-grid { grid-template-columns:repeat(4,1fr); gap:16px; margin-top:0; }
+  .not-card { padding:28px 20px; }
+  .not-ico { width:70px; height:70px; font-size:30px; }
+
+  /* ── AMAZON ── */
+  .amazon-section { padding:100px 60px; }
+  .amz-desk {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:80px; align-items:center;
+  }
+  .amz-left .cin-title { font-size:52px; }
+  .amz-feats { margin:28px 0 0; }
+  .amz-feat { padding:20px 22px; border-radius:var(--r2); }
+  .amz-feat-ico { width:48px; height:48px; font-size:22px; border-radius:14px; }
+  .amz-feat-txt strong { font-size:15px; }
+  .amz-feat-txt span { font-size:14px; }
+  .amz-right {
+    display:flex; flex-direction:column; gap:16px;
+    justify-content:center;
+  }
+  .amz-right .btn-primary { font-size:16px; padding:22px 28px; }
+
+  /* ── REVIEWS ── */
+  .reviews-section { padding:100px 60px; }
+  .rev-cards { flex-direction:row; gap:20px; margin-top:48px; }
+  .rev-card { flex:1; }
+  .rev-text { font-size:15px; }
+
+  /* ── FINAL CTA ── */
+  .final-section { position:relative; min-height:680px; }
+  .final-img-wrap { position:absolute; inset:0; }
+  .final-bg-img { width:100%; height:100%; object-fit:cover; object-position:center top; }
+  .final-overlay { background:linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 58%, rgba(0,0,0,0.88) 82%, #080808 100%); }
+  .final-content { margin-top:0; position:absolute; bottom:0; left:0; right:0; padding:0 60px 80px; }
+  .final-title { font-size:64px; letter-spacing:-2px; }
+  .final-sub { font-size:18px; }
+  .final-btns { flex-direction:row; justify-content:center; gap:16px; }
+  .final-btns .btn-primary,
+  .final-btns .btn-ghost { width:auto; padding:20px 36px; font-size:16px; }
+  .final-trust { gap:28px; }
+  .ft-item { font-size:13px; }
+
+  /* ── glow divider ── */
+  .glow-divider { height:1px; }
+}
+
+/* ══ XL desktop (≥ 1200px) ══════════════════════════════════════════════ */
+@media(min-width:1200px){
+  .cin-title { font-size:68px; }
+  .hero-title { font-size:88px; }
+  .hero-title .word:nth-child(3) { font-size:62px; }
+  .cin-section { padding:120px 80px; }
+  .problem-section { padding:120px 80px; }
+  .sol-section { padding:120px 80px; }
+  .how-section { padding:120px 80px; }
+  .benefits-section { padding:120px 80px; }
+  .works-section { padding:120px 80px; }
+  .not-section { padding:120px 80px; }
+  .amazon-section { padding:120px 80px; }
+  .reviews-section { padding:120px 80px; }
+  .stats-section { padding:60px 80px; }
+  .detail-section { padding:40px 80px; }
+  .final-section { padding:140px 80px 100px; }
+}
+
+</style>
+
+<!-- ── Schema.org structured data ── -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "ANTIVE 2-in-1 Electric Scissors & Rotary Cutter",
+    "description": "Cordless 2-in-1 cutting tool with swappable rotary cutter and electric scissors heads. Cuts cardboard, fabric, felt, leather and packaging with zero hand fatigue.",
+    "brand": { "@type": "Brand", "name": "ANTIVE" },
+    "image": [
+      "https://landing.antivetools.com/img/rottary.png",
+      "https://landing.antivetools.com/img/scissors.png"
+    ],
+    "offers": {
+      "@type": "Offer",
+      "price": "39.95",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "seller": { "@type": "Organization", "name": "Amazon" },
+      "url": "https://www.amazon.com"
+    },
+    "category": "Power Tools"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What materials can the ANTIVE 2-in-1 cut?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The ANTIVE 2-in-1 cuts cardboard, fabric, felt, soft leather, wrapping paper, zip ties and more. It is not designed for thick metal, hard wood or stone."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does the battery last?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The battery lasts up to 3 hours of continuous use on a full charge."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you swap the cutting heads?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Press the release button and the head detaches in under 3 seconds. No tools or screws needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the ANTIVE 2-in-1 cordless?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, it is fully cordless and charges via USB-C. You can charge it with any standard USB-C cable."
+        }
+      }
+    ]
+  }
+]
+</script>
+</head>
+<body>
+
+<!-- progress bar -->
+<div id="progress"></div>
+
+<!-- ════ FLOATING PIP VIDEO ════ -->
+<div class="pip-wrap" id="pip">
+  <video class="pip-video" autoplay muted loop playsinline>
+    <source src="video/Video background.mov" type="video/mp4">
+  </video>
+  <div class="pip-label">ANTIVE 2-IN-1</div>
+  <div class="pip-close" id="pip-close">✕</div>
+</div>
+
+<!-- ════════════════════════════ HEADER ════════════════════════════ -->
+<header class="hdr">
+  <div class="logo">
+    <img src="img/Logo.png" alt="ANTIVE" class="logo-img">
+  </div>
+  <a href="#buy" class="hdr-cta">Buy on Amazon →</a>
+</header>
+
+<!-- ════════════════════════════ HERO VIDEO ══════════════════════ -->
+<section class="hero-video-section s-card">
+  <div class="vid-wrap">
+    <video class="hero-video sound-video" autoplay muted loop playsinline>
+      <source src="video/Hero video.mov" type="video/mp4">
+    </video>
+    <button class="sound-btn" aria-label="Toggle sound">
+      <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      <svg class="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ════════════════════════════ HERO TEXT ═══════════════════════ -->
+<section class="hero-text-section s-card">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="hero-eyebrow">
+    <span>2&#8209;in&#8209;1 Electric Scissors &amp; Rotary Cutter</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="word">CUT</span>&nbsp;<span class="word">FASTER.</span><br>
+    <span class="word" style="font-size:36px;letter-spacing:-1px;">Less effort.</span>
+  </h1>
+
+  <p class="hero-sub">One cordless tool. Two interchangeable heads.<br>Open boxes, cut fabric — no hand fatigue.</p>
+
+  <div class="btn-badge-wrap">
+    <a href="#buy" class="btn-hero">
+      <img src="img/amazon-smile.png" alt="" height="54" style="flex-shrink:0;display:block;">
+      <span>BUY ON AMAZON — $39.95</span>
+    </a>
+    <div class="hero-badges">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H3l9-9 9 9h-2v7a1 1 0 01-1 1H6a1 1 0 01-1-1v-7z" stroke="#00A8E0" stroke-width="2" stroke-linejoin="round"/></svg>
+        <div class="badge-text"><span class="badge-top">Prime</span><span class="badge-bot">Eligible</span></div>
+      </div>
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 12C3 7.03 7.03 3 12 3c3.47 0 6.47 1.97 8 4.85" stroke="#22C55E" stroke-width="2" stroke-linecap="round"/><path d="M21 3v5h-5" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12c0 4.97-4.03 9-9 9-3.47 0-6.47-1.97-8-4.85" stroke="#22C55E" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="badge-text"><span class="badge-top">Free</span><span class="badge-bot">Returns</span></div>
+      </div>
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 4.42 3.56 8.57 8 10 4.44-1.43 8-5.58 8-10V6l-8-4z" stroke="#F47B20" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#F47B20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="badge-text"><span class="badge-top">1-Year</span><span class="badge-bot">Warranty</span></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════ WHY SECTION ════════════════════ -->
+<div class="why-section s-card">
+  <p class="why-label">WHY PEOPLE WANT IT</p>
+  <div class="why-cards">
+
+    <div class="why-card">
+      <div class="why-card-img">
+        <img src="img/why-1.jpg" alt="Open boxes in seconds" style="object-position:center 15%;" onerror="this.parentElement.innerHTML='<div class=\'why-card-placeholder\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'none\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke=\'white\' stroke-width=\'1.5\'/><path d=\'M3 9h18\' stroke=\'white\' stroke-width=\'1.5\'/></svg><span>Photo coming soon</span></div>'">
+      </div>
+      <div class="why-card-body">
+        <div class="why-card-bg-num">01</div>
+        <div class="why-card-title">Open boxes in seconds</div>
+        <div class="why-card-desc">No more struggling with scissors or box cutters. The rotary blade cuts clean every time.</div>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-card-img">
+        <img src="img/why-2.jpg" alt="Zero hand fatigue" onerror="this.parentElement.innerHTML='<div class=\'why-card-placeholder\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'none\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke=\'white\' stroke-width=\'1.5\'/><path d=\'M3 9h18\' stroke=\'white\' stroke-width=\'1.5\'/></svg><span>Photo coming soon</span></div>'">
+      </div>
+      <div class="why-card-body">
+        <div class="why-card-bg-num">02</div>
+        <div class="why-card-title">Zero hand fatigue</div>
+        <div class="why-card-desc">The motor does the work. Cut fabric, leather and packaging without tiring your hand.</div>
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-card-img">
+        <img src="img/why-3.png" alt="Two tools, one device" onerror="this.parentElement.innerHTML='<div class=\'why-card-placeholder\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'none\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke=\'white\' stroke-width=\'1.5\'/><path d=\'M3 9h18\' stroke=\'white\' stroke-width=\'1.5\'/></svg><span>Photo coming soon</span></div>'">
+      </div>
+      <div class="why-card-body">
+        <div class="why-card-bg-num">03</div>
+        <div class="why-card-title">Two tools, one device</div>
+        <div class="why-card-desc">Swap heads in seconds — rotary cutter for cardboard, electric scissors for fabric.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════ PROBLEM ════════════════════════ -->
+<section class="problem-section cin-section s-card">
+  <div class="desk-inner">
+    <div class="prob-left">
+      <div class="cin-eyebrow">The Problem</div>
+      <h2 class="cin-title">
+        <div class="reveal-line"><span>Manual cutting</span></div>
+        <div class="reveal-line"><span>gets old fast.</span></div>
+      </h2>
+      <p class="cin-sub">Every tool out there is too slow, too risky, or only does one thing.</p>
+    </div>
+    <div class="prob-stack">
+      <div class="prob-card">
+        <div class="prob-img">
+          <img src="img/problem-scissors.jpg.png" alt="Regular scissors">
+          <div class="prob-badge">✕</div>
+        </div>
+        <div class="prob-txt">
+          <div class="prob-name">Regular scissors</div>
+          <div class="prob-desc">Hand strain after long sessions. Not built for volume.</div>
+        </div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-img">
+          <img src="img/problem-boxcutter.jpg.png" alt="Box cutter">
+          <div class="prob-badge">✕</div>
+        </div>
+        <div class="prob-txt">
+          <div class="prob-name">Box cutters</div>
+          <div class="prob-desc">Dull, risky and hard to control precisely.</div>
+        </div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-img">
+          <img src="img/problem-tools.jpg.png" alt="Too many tools">
+          <div class="prob-badge">✕</div>
+        </div>
+        <div class="prob-txt">
+          <div class="prob-name">Too many tools</div>
+          <div class="prob-desc">More clutter. One task each. More hassle.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ SOLUTION ════════════════════════ -->
+<section class="sol-section cin-section s-card">
+  <div class="sol-glow"></div>
+  <div class="cin-eyebrow sol-eyebrow-top">Smarter Solution</div>
+  <div class="sol-desk">
+    <div class="sol-left">
+      <div class="vid-wrap">
+        <video class="sol-img sol-video sound-video" src="video/One tool 2 heads.mov" autoplay muted loop playsinline></video>
+        <button class="sound-btn" aria-label="Toggle sound">
+          <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="sol-right">
+      <h2 class="cin-title">
+        <div class="reveal-line"><span>ANTIVE 2-IN-1.</span></div>
+        <div class="reveal-line"><span style="color:var(--o)">One tool.</span></div>
+        <div class="reveal-line"><span>Zero compromise.</span></div>
+      </h2>
+      <p class="cin-sub">One cordless tool. Two cutting heads. Less effort — every single time.</p>
+      <div class="sol-single-img">
+        <img src="img/2 in 1.jpg" alt="ANTIVE 2-in-1">
+      </div>
+      <div class="head-duo" style="display:none">
+        <div class="head-pill">
+          <div class="head-pill-icon">
+            <img src="img/rottary.png" alt="Rotary Head">
+          </div>
+          <div class="head-pill-overlay"></div>
+          <div class="head-pill-body">
+            <div class="head-pill-tag">Head #1</div>
+            <div class="head-pill-name">Rotary</div>
+            <div class="head-pill-desc">Cardboard, boxes &amp; packaging</div>
+          </div>
+        </div>
+        <div class="head-pill">
+          <div class="head-pill-icon">
+            <img src="img/scissors.png" alt="Scissors Head">
+          </div>
+          <div class="head-pill-overlay"></div>
+          <div class="head-pill-body">
+            <div class="head-pill-tag">Head #2</div>
+            <div class="head-pill-name">Scissors</div>
+            <div class="head-pill-desc">Fabric, felt, leather &amp; more</div>
+          </div>
+        </div>
+      </div>
+      <a href="#buy" class="btn-primary">
+        <span>SEE IT ON AMAZON</span>
+        <span class="ico">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ CUTTING APP ════════════════════ -->
+<section class="app-section s-card">
+
+  <div class="app-inner">
+
+    <!-- LEFT: text -->
+    <div class="app-text">
+      <div class="cin-eyebrow" style="color:var(--o)">AI-Powered</div>
+      <h2 class="app-title">Not sure which<br><span>head to use?</span></h2>
+      <p class="app-sub">The free ANTIVE Cutting App scans your material and tells you exactly which head to attach — and at what speed. Powered by AI.</p>
+
+      <div class="app-features">
+        <div class="app-feat">
+          <div class="app-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z" stroke="var(--o)" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="var(--o)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="app-feat-name">Instant material recognition</div>
+            <div class="app-feat-desc">Point the camera, get the answer in seconds</div>
+          </div>
+        </div>
+        <div class="app-feat">
+          <div class="app-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v1M12 20v1M4.22 4.22l.7.7M19.07 19.07l.71.71M3 12H4M20 12h1M4.22 19.78l.7-.7M19.07 4.93l.71-.71" stroke="var(--o)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="var(--o)" stroke-width="1.5"/></svg>
+          </div>
+          <div>
+            <div class="app-feat-name">Head & speed recommendation</div>
+            <div class="app-feat-desc">Rotary or scissors — the app decides for you</div>
+          </div>
+        </div>
+        <a href="https://www.antivetools.com/cutting-app" target="_blank" class="app-link-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Try the Cutting App — Free
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: two phones fan layout -->
+    <div class="app-phone-wrap">
+      <div class="app-phone-glow"></div>
+      <div class="app-fan">
+        <div class="app-phone app-phone--left">
+          <div class="app-phone-notch"></div>
+          <div class="app-phone-screen">
+            <img src="img/cutting app_1.jpeg" alt="ANTIVE Cutting App screen 1" class="app-screenshot">
+          </div>
+          <div class="app-phone-btn"></div>
+        </div>
+        <div class="app-phone app-phone--right">
+          <div class="app-phone-notch"></div>
+          <div class="app-phone-screen">
+            <img src="img/cutting app_2.jpeg" alt="ANTIVE Cutting App screen 2" class="app-screenshot">
+          </div>
+          <div class="app-phone-btn"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ════════════════════════════ HOW IT WORKS ════════════════════ -->
+<section class="how-section cin-section s-card">
+  <div class="cin-eyebrow">How It Works</div>
+  <h2 class="cin-title">
+    <div class="reveal-line"><span>Switch heads.</span></div>
+    <div class="reveal-line"><span>In seconds.</span></div>
+  </h2>
+
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <div class="how-step-body">
+        <div class="how-step-title">Attach the head</div>
+        <div class="how-step-desc">Click the rotary or scissors head into place — no tools, no screws.</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <div class="how-step-body">
+        <div class="how-step-title">Press & cut</div>
+        <div class="how-step-desc">Hold the trigger and guide the tool — the motor does all the work.</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <div class="how-step-body">
+        <div class="how-step-title">Swap in seconds</div>
+        <div class="how-step-desc">One press releases the head. Switch between rotary and scissors instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-video-wrap">
+    <div class="vid-wrap">
+      <video class="how-video sound-video" src="video/how-it-works.mov" autoplay muted loop playsinline></video>
+      <button class="sound-btn" aria-label="Toggle sound">
+        <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <svg class="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ════════════════════════════ ORIGIN STORY ═══════════════════ -->
+<section class="origin-section s-card">
+  <div class="origin-eyebrow">The Story Behind It</div>
+  <h2 class="origin-title">From <span>Sketch</span> to Final Cut</h2>
+  <p class="origin-sub">Built step by step to make cutting faster, easier, and smarter.</p>
+
+  <div class="origin-duo">
+    <div class="origin-img-wrap origin-img--left">
+      <img src="img/timeline.png" alt="ANTIVE development timeline">
+    </div>
+    <div class="origin-img-wrap origin-img--right">
+      <img src="img/concept.png" alt="ANTIVE concept development">
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ WORKS ON ════════════════════════ -->
+<section class="works-section cin-section s-card">
+  <div class="works-desk">
+    <div class="works-left">
+      <div class="cin-eyebrow" style="color:var(--gn)">Compatible Materials</div>
+      <h2 class="cin-title">
+        <div class="reveal-line"><span>Works</span></div>
+        <div class="reveal-line"><span>great on</span></div>
+      </h2>
+    </div>
+    <div class="mat-grid">
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/cardboard.jpg" alt="Cardboard" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Cardboard</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/rubber.jpg" alt="Thin Rubber" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Thin Rubber</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/packaging.jpg" alt="Packaging" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Packaging</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/fabric.jpg" alt="Fabric" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Fabric</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/felt.png" alt="Felt" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Felt</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/leather.jpg" alt="Soft Leather" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Soft Leather</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/plastic.jpg" alt="Thin Plastic" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Thin Plastic</div>
+      </div>
+      <div class="mat-item">
+        <div class="mat-box"><img src="img/carpet.jpg" alt="Carpet" loading="lazy" width="120" height="120"><div class="mat-check">✓</div></div>
+        <div class="mat-label">Carpet</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════ AMAZON ════════════════════════ -->
+<section class="amazon-section cin-section s-card" id="buy">
+  <div class="amz-desk">
+    <div class="amz-left">
+      <div class="cin-eyebrow">Where to Buy</div>
+      <h2 class="cin-title">
+        <div class="reveal-line"><span>Available on</span></div>
+        <div class="reveal-line"><span style="color:var(--o)">Amazon.</span></div>
+      </h2>
+      <div class="amz-feats">
+        <div class="amz-feat">
+          <div class="amz-feat-ico amz-feat-ico--img"><img src="img/prime.png" alt="Prime Delivery" loading="lazy"></div>
+          <div class="amz-feat-txt"><strong>Prime Delivery Available</strong><span>Fast, free shipping for Prime members</span></div>
+        </div>
+        <div class="amz-feat">
+          <div class="amz-feat-ico">📦</div>
+          <div class="amz-feat-txt"><strong>30-Day Returns</strong><span>Hassle-free through Amazon</span></div>
+        </div>
+        <div class="amz-feat">
+          <div class="amz-feat-ico">🛡️</div>
+          <div class="amz-feat-txt"><strong>2+3 Year Warranty</strong><span>Extended coverage included</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="amz-right">
+      <div class="amz-videos">
+        <div class="vid-wrap amz-vid">
+          <video autoplay muted loop playsinline><source src="video/Rotarry cut.mov" type="video/mp4"></video>
+          <button class="sound-btn" aria-label="Toggle sound">
+            <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg class="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+        </div>
+        <div class="vid-wrap amz-vid">
+          <video autoplay muted loop playsinline><source src="video/Scissors cut.mov" type="video/mp4"></video>
+          <button class="sound-btn" aria-label="Toggle sound">
+            <svg class="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg class="ico-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+        </div>
+      </div>
+      <a href="#" class="btn-primary">
+        <span>CHECK PRICE ON AMAZON</span>
+        <span class="ico">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ REVIEWS ════════════════════════ -->
+<section class="reviews-section cin-section s-card">
+  <div class="cin-eyebrow">Social Proof</div>
+  <h2 class="cin-title">
+    <div class="reveal-line"><span>What people say.</span></div>
+  </h2>
+  <div class="rev-cards">
+    <div class="rev-card">
+      <div class="rev-author">
+        <div class="rev-avatar-placeholder" style="background:linear-gradient(135deg,#5B8EE6,#3A6BC8);">DM</div>
+        <div>
+          <div class="rev-name">Donna M.</div>
+          <div class="rev-location">Texas, USA · 67 years old</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="rev-text">"Cuts through cardboard like butter. Huge time saver for my business! I open dozens of boxes daily — this thing is an absolute game changer."</div>
+      <div class="rev-badge">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-author">
+        <div class="rev-avatar-placeholder" style="background:linear-gradient(135deg,#E07B54,#C45A35);">JR</div>
+        <div>
+          <div class="rev-name">James R.</div>
+          <div class="rev-location">Ohio, USA · 41 years old</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="rev-text">"Love the 2-in-1 feature. I use it daily for both boxes and fabric. Switching heads is fast and the battery lasts all day."</div>
+      <div class="rev-badge">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-author">
+        <div class="rev-avatar-placeholder" style="background:linear-gradient(135deg,#6DBE8C,#459966);">PK</div>
+        <div>
+          <div class="rev-name">Patricia K.</div>
+          <div class="rev-location">Florida, USA · 72 years old</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="rev-text">"As a quilter with arthritis, this has been life-changing. No more hand strain. The rotary head glides through fabric so smoothly — I only wish I'd found it sooner."</div>
+      <div class="rev-badge">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-author">
+        <div class="rev-avatar-placeholder" style="background:linear-gradient(135deg,#B07FD6,#8A56B5);">MT</div>
+        <div>
+          <div class="rev-name">Marcus T.</div>
+          <div class="rev-location">California, USA · 38 years old</div>
+        </div>
+      </div>
+      <div class="stars">★★★★★</div>
+      <div class="rev-text">"I run a small e-commerce shop and this thing saves me at least 30 minutes a day. Charges fast, feels solid in the hand, and the blade is still sharp after 3 months of heavy use."</div>
+      <div class="rev-badge">✓ Verified Purchase</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ FAQ ════════════════════════════ -->
+<section class="faq-section s-card">
+  <div class="cin-eyebrow">FAQ</div>
+  <h2 class="faq-title">Questions & Answers</h2>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>What materials can it cut?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>The ANTIVE 2-IN-1 cuts cardboard, kraft paper, packaging tape, fabric, felt, soft leather, foam, and more. With 8+ compatible materials, it handles most everyday cutting tasks with ease.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>Can I use it on cardboard?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Yes — the rotary cutting head is specifically designed for cardboard and packaging. It slices through boxes cleanly and quickly, with no tearing or jagged edges.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>Is it good for fabric and felt?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Absolutely. The electric scissors head is perfect for fabric, felt, and soft leather. The motorized blades cut smoothly along any line without hand fatigue, even for longer sessions.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>How do I switch the heads?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Press the head release button, pull the current head off, and click the new one into place. The entire swap takes under 5 seconds — no tools required.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>Is it rechargeable?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Yes. The ANTIVE 2-IN-1 charges via USB-C — the same cable as most modern phones. No proprietary charger needed. A full charge takes approximately 1.5–2 hours.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>How long does the battery last?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>The 2000mAh battery provides up to 3 hours of continuous use on a full charge. A LED indicator on the device shows the remaining battery level at all times.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>Is it suitable for people with hand strain?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Yes — this is one of the main reasons people love it. The motorized mechanism does all the cutting work, so your hand only needs to guide the tool. Ideal for arthritis, repetitive strain, or anyone who cuts frequently.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">
+        <span>Does it come with both cutting heads?</span>
+        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="faq-a"><p>Yes. Every ANTIVE 2-IN-1 package includes both the rotary cutting head and the electric scissors head, plus the USB-C charging cable. Everything you need is in the box.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════ FINAL CTA ════════════════════ -->
+<section class="final-section s-card">
+  <div class="final-img-wrap">
+    <img class="final-bg-img" src="img/ready.jpg" alt="ANTIVE 2-in-1">
+    <div class="final-overlay"></div>
+  </div>
+  <div class="final-content">
+    <h2 class="final-title">Ready to<br><span class="acc">cut faster?</span></h2>
+    <p class="final-sub">Check today's price and availability on Amazon.</p>
+    <div class="final-btns">
+      <a href="#" class="btn-primary">
+        <span>CHECK PRICE ON AMAZON</span>
+        <span class="ico">→</span>
+      </a>
+      <a href="#" class="btn-ghost">Learn more ↓</a>
+    </div>
+    <div class="final-trust">
+      <div class="ft-item">🔒 Secure checkout</div>
+      <div class="ft-item">🔵 Prime eligible</div>
+      <div class="ft-item">📦 30-day returns</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ JAVASCRIPT ════════════════════ -->
+<script>
+/* ── scroll progress bar ── */
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  prog.style.transform = `scaleX(${pct})`;
+}, { passive:true });
+
+/* ── intersection observer factory ── */
+const io = (els, cb, opts={}) => {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ cb(e.target); obs.unobserve(e.target); } });
+  }, { threshold: 0.05, ...opts });
+  els.forEach(el => obs.observe(el));
+};
+
+/* ── generic "in" class ── */
+io(document.querySelectorAll('.cin-section'), el => el.classList.add('in'), { threshold: 0, rootMargin: '200px 0px 200px 0px' });
+/* trigger immediately for sections already in viewport on load */
+document.querySelectorAll('.cin-section').forEach(el => {
+  const r = el.getBoundingClientRect();
+  if(r.top < window.innerHeight) el.classList.add('in');
+});
+io(document.querySelectorAll('.prob-card'),  el => el.classList.add('in'));
+io(document.querySelectorAll('.head-pill'),  el => el.classList.add('in'));
+io(document.querySelectorAll('.sol-img'),    el => el.classList.add('in'));
+io(document.querySelectorAll('.step-card'),  el => el.classList.add('in'));
+io(document.querySelectorAll('.how-step'),   el => el.classList.add('in'));
+io(document.querySelectorAll('.mat-item'),   el => el.classList.add('in'), { threshold:0.05 });
+io(document.querySelectorAll('.not-card'),   el => el.classList.add('in'));
+io(document.querySelectorAll('.amz-feat'),   el => el.classList.add('in'));
+io(document.querySelectorAll('.rev-card'),   el => el.classList.add('in'));
+io(document.querySelectorAll('.detail-img'), el => el.classList.add('in'));
+
+/* ── counter animation ── */
+function animCount(el) {
+  const target = parseInt(el.dataset.target);
+  const dur = 1200;
+  const start = performance.now();
+  const tick = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target);
+    if(p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+io(document.querySelectorAll('.count'), el => animCount(el), { threshold:0.5 });
+
+/* ── Anatomy auto-play ── */
+(function(){
+  const outer = document.querySelector('.anatomy-outer');
+  if(!outer) return;
+  const frames  = outer.querySelectorAll('.aframe');
+  const labels  = outer.querySelectorAll('.alabel');
+  const dots    = outer.querySelectorAll('.adot');
+  const bar     = document.getElementById('aProgressBar');
+  const STEP_MS = 2200;
+  const TOTAL   = frames.length;
+  let current = 0, timer = null, barAnim = null;
+
+  function setStep(n) {
+    current = (n + TOTAL) % TOTAL;
+    frames.forEach((f,i) => f.classList.toggle('active', i===current));
+    labels.forEach((l,i) => l.classList.toggle('active', i===current));
+    dots.forEach((d,i)   => d.classList.toggle('active', i===current));
+  }
+
+  function startBar() {
+    if(!bar) return;
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        bar.style.transition = `width ${STEP_MS}ms linear`;
+        bar.style.width = '100%';
+      });
+    });
+  }
+
+  function next() { setStep(current + 1); startBar(); }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, STEP_MS);
+    startBar();
+  }
+
+  /* start when section enters viewport */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) { startTimer(); }
+      else { clearInterval(timer); }
+    });
+  }, { threshold: 0.3 });
+  obs.observe(outer);
+
+  /* dot clicks */
+  dots.forEach(d => {
+    d.addEventListener('click', () => {
+      setStep(parseInt(d.dataset.step));
+      startTimer();
+    });
+  });
+}());
+
+/* ── App section animations ── */
+const appSection = document.querySelector('.app-section');
+if(appSection) {
+  const appObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        appSection.querySelector('.app-phone-wrap')?.classList.add('in');
+        /* phone 1 apare imediat */
+        appSection.querySelector('.app-phone--left')?.classList.add('fan-in');
+        /* phone 2 apare după 2 secunde */
+        setTimeout(() => {
+          appSection.querySelector('.app-phone--right')?.classList.add('fan-in');
+        }, 2000);
+        appSection.querySelectorAll('.app-feat').forEach((f, i) => {
+          setTimeout(() => f.classList.add('in'), i * 150);
+        });
+        appObs.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  appObs.observe(appSection);
+}
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  });
+});
+
+/* ── Origin steps fade-in sequentially ── */
+const originSection = document.querySelector('.origin-section');
+if(originSection) {
+  const originObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        originSection.querySelectorAll('.origin-step').forEach((step, i) => {
+          setTimeout(() => step.classList.add('in'), i * 300);
+        });
+        originObs.disconnect();
+      }
+    });
+  }, { threshold: 0.15 });
+  originObs.observe(originSection);
+}
+
+/* ── Why items slide-in from right ── */
+const whySection = document.querySelector('.why-section');
+if(whySection) {
+  const whyItems = whySection.querySelectorAll('.why-card');
+  const whyObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        whyItems.forEach((item, i) => {
+          setTimeout(() => item.classList.add('slide-in'), i * 1000);
+        });
+        whyObs.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  whyObs.observe(whySection);
+}
+
+/* ── Stats slide-in from right ── */
+const statsSection = document.querySelector('.stats-section');
+if(statsSection) {
+  const statItems = statsSection.querySelectorAll('.stat-item');
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        statItems.forEach((item, i) => {
+          setTimeout(() => item.classList.add('slide-in'), i * 700);
+        });
+        statsObs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  statsObs.observe(statsSection);
+}
+
+/* ── PIP floating video ── */
+const pipWrap   = document.getElementById('pip');
+const pipClose  = document.getElementById('pip-close');
+const heroVid   = document.querySelector('.hero-video-section');
+
+if(heroVid && pipWrap) {
+  const pipObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(!e.isIntersecting) {
+        pipWrap.classList.add('visible');
+      } else {
+        pipWrap.classList.remove('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  pipObs.observe(heroVid);
+}
+
+if(pipClose) {
+  pipClose.addEventListener('click', () => {
+    pipWrap.classList.add('hidden');
+  });
+}
+
+/* ── magnetic CTA buttons ── */
+document.querySelectorAll('.btn-primary, .btn-hero').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top - r.height/2;
+    btn.style.transform = `translate(${x*0.12}px, ${y*0.2}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+
+/* ── Sound toggle ── */
+document.querySelectorAll('.sound-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const video = btn.closest('.vid-wrap').querySelector('video');
+    video.muted = !video.muted;
+    btn.querySelector('.ico-muted').style.display = video.muted ? '' : 'none';
+    btn.querySelector('.ico-sound').style.display  = video.muted ? 'none' : '';
+  });
+});
+
+/* ── Auto-mute when video scrolls out of view ── */
+document.querySelectorAll('.vid-wrap').forEach(wrap => {
+  const video = wrap.querySelector('video');
+  const btn   = wrap.querySelector('.sound-btn');
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(!e.isIntersecting && !video.muted) {
+        video.muted = true;
+        btn.querySelector('.ico-muted').style.display = '';
+        btn.querySelector('.ico-sound').style.display  = 'none';
+      }
+    });
+  }, { threshold: 0.1 }).observe(wrap);
+});
+</script>
+</body>
+</html>
